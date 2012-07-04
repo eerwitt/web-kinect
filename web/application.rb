@@ -10,7 +10,7 @@ module Web
     end
 
     def self.haml(template)
-      Haml::Engine.new(Web::Application.root("app/views/#{template}.html.haml")).render
+      Haml::Engine.new(File.read(Web::Application.root("app/views/#{template}.html.haml"))).render
     end
 
     def self.env
