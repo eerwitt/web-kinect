@@ -40,7 +40,9 @@ class Kinect
         x += 1
 
         #points << {:x => x, :y => y, :z => depth}
-        points = [{:x => x, :y => y, :z => depth}]
+        if x == (width / 2).to_i and y == (height / 2).to_i
+          points = [{:x => x, :y => y, :z => depth}]
+        end
       end
 
       block.call points
