@@ -2,6 +2,8 @@ GEM
   remote: http://rubygems.org/
   specs:
     columnize (0.3.6)
+    ffi (1.0.11)
+    json (1.7.3)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
     rbx-require-relative (0.0.9)
@@ -15,4 +17,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ffi
+  json
   ruby-debug

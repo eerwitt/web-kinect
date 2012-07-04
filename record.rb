@@ -1,4 +1,7 @@
+require 'ruby-debug'
+$: << File.expand_path(File.join(File.dirname(__FILE__), "./ffi-libfreenect/lib"))
 require 'freenect'
+require 'json'
 
 $record_running = true
 
@@ -16,7 +19,20 @@ dev.start_depth()
 dev.start_video()
 
 dev.set_depth_callback do |device, depth, timestamp|
-  puts depth.read_string_length(Freenect::DEPTH_11BIT_SIZE).unpack('S*').length
+  width = Freenect::FRAME_W
+  height = Freenect::FRAME_H
+
+  x = 0
+  y = 1
+  depth.read_string_length(Freenect::DEPTH_11BIT_SIZE).unpack('S*').each_with_index do |depth, i|
+    if (i % width) == 0
+      y += 1
+      x = 0
+    end
+    x += 1
+
+    puts({:x => x, :y => y, :z => depth}.to_json)
+  end
 end
 
 #dev.set_video_callback do |device, video, timestamp|
@@ -26,8 +42,8 @@ end
 #  end
 #end
 
-#while $record_running and (ctx.process_events >= 0)
-#end
+while $record_running and (ctx.process_events >= 0)
+end
 
 dev.stop_depth
 dev.stop_video
