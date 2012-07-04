@@ -1,6 +1,8 @@
 class HomeAction < Cramp::Action
   def start
-    render "Hello World!"
+    require 'haml'
+    debugger
+    render "TET"
     finish
   end
 end

@@ -3,7 +3,9 @@ source :rubygems
 gem 'cramp'
 
 # Async webserver for running a cramp application
+gem 'foreman'
 gem 'thin'
+gem 'haml'
 
 # Rack based routing
 gem 'http_router'
@@ -24,4 +26,5 @@ gem 'async-rack'
 group :development do
   # Development gems
   # gem 'ruby-debug19'
+  gem 'ruby-debug'
 end
