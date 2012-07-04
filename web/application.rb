@@ -23,7 +23,6 @@ module Web
 
     # Initialize the application
     def self.initialize!
-      Cramp::Websocket.backend = :thin
     end
 
   end
