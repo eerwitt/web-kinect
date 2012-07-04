@@ -8,6 +8,7 @@ class EchoAction <  Rack::WebSocket::Application
       @sub = EM::Hiredis.connect("redis://localhost:6379")
 
       @sub.subscribe "kinect_raw"
+      # {:points => [{:x => 123, :y => 234, :z => 456}]}
       @sub.on(:message) do |channel,pixels| 
         send_data pixels
       end
