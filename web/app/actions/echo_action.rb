@@ -1,8 +1,4 @@
-Cramp::Websocket.backend = :thin
-
-class EchoAction < Cramp::Action
-  self.transport = :websocket
-
+class EchoAction < Cramp::Websocket
   on_data :received_data
 
   def received_data(data)
