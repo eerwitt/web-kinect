@@ -2,5 +2,22 @@
 %html
   %head
     %title KinectWeb
+    %script{:src => "/javascripts/web-socket-js/swfobject.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/web-socket-js/web_socket.js", :type => "text/javascript"}
+    :javascript
+      WEB_SOCKET_SWF_LOCATION = "/javascripts/web-socket-js/WebSocketMain.swf";
+
+      // Write your code in the same way as for native WebSocket:
+      var ws = new WebSocket("ws://#{request.host_with_port}/echo");
+      ws.onopen = function() {
+        ws.send("Hello");  // Sends a message.
+      };
+      ws.onmessage = function(e) {
+        // Receives a message.
+        alert(e.data);
+      };
+      ws.onclose = function() {
+        alert("closed");
+      }; 
   %body
     %p works
