@@ -8,7 +8,7 @@
       WEB_SOCKET_SWF_LOCATION = "/javascripts/web-socket-js/WebSocketMain.swf";
 
       // Write your code in the same way as for native WebSocket:
-      var ws = new WebSocket("ws://#{request.host_with_port}/echo");
+      var ws = new WebSocket("ws://localhost:3000/echo");
       ws.onopen = function() {
         ws.send("Hello");  // Sends a message.
       };
