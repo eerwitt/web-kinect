@@ -1,8 +1,17 @@
+GIT
+  remote: git://github.com/mloughran/em-hiredis.git
+  revision: aa5ae6bd019946a492e1879f5f8f860fef9b49f0
+  specs:
+    em-hiredis (0.1.1)
+      hiredis (~> 0.4.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
     columnize (0.3.6)
+    eventmachine (1.0.0.rc.4)
     ffi (1.0.11)
+    hiredis (0.4.5)
     json (1.7.3)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
@@ -17,6 +26,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  em-hiredis!
+  eventmachine
   ffi
   json
   ruby-debug

@@ -4,12 +4,12 @@ class EchoAction <  Rack::WebSocket::Application
   def on_open(env)
     puts "Client connected"
     EM.next_tick do
-      @pub = EM::Hiredis.connect("redis://localhost:6379")
       @sub = EM::Hiredis.connect("redis://localhost:6379")
 
       @sub.subscribe "kinect_raw"
       # {:points => [{:x => 123, :y => 234, :z => 456}]}
       @sub.on(:message) do |channel,pixels| 
+        puts "Got pixels #{pixels.length}"
         send_data pixels
       end
     end
@@ -17,7 +17,6 @@ class EchoAction <  Rack::WebSocket::Application
 
   def on_close(env)
     puts "Closing"
-    @pub.close_connection
     @sub.close_connection
   end
 
