@@ -12,7 +12,6 @@
       };
 
       ws.onmessage = function(e) {
-        console.log(e)
         var data = $.parseJSON(e.data);
         $.each(data.points, function(i, point) {
           $('#debug').append( $('<li>', {
