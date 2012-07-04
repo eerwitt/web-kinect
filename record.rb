@@ -52,8 +52,7 @@ dev.set_depth_callback do |device, depth, timestamp|
   open_dump('d', timestamp, "pgm") do |f|
     f.puts("P5 %d %d 65535\n" % [ Freenect::FRAME_W, Freenect::FRAME_H ] )
     f.write(depth.read_string_length(Freenect::DEPTH_11BIT_SIZE))
-    puts depth.unpack('S*').length
-    debugger
+    puts depth.read_string_length(Freenect::DEPTH_11BIT_SIZE).unpack('S*').length
   end
 end
 
