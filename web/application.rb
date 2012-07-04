@@ -9,6 +9,10 @@ module Web
       path ? File.join(@_root, path.to_s) : @_root
     end
 
+    def self.haml(template)
+      Haml::Engine.new(Web::Application.root("app/views/#{template}.html.haml")).render
+    end
+
     def self.env
       @_env ||= ENV['RACK_ENV'] || 'development'
     end

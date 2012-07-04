@@ -1,8 +1,7 @@
 class HomeAction < Cramp::Action
   def start
-    require 'haml'
     debugger
-    render "TET"
+    render Web::Application.haml("index")
     finish
   end
 end
