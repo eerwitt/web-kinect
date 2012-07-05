@@ -5,13 +5,6 @@ require 'em-hiredis'
 require 'freenect'
 require 'json'
 
-$record_running = true
-
-trap('INT') do
-  STDERR.puts "Caught INT signal cleaning up"
-  EventMachine::stop_event_loop
-end
-
 class Kinect
   def initialize
     @ctx = Freenect.init()
@@ -42,9 +35,6 @@ class Kinect
         if ((x % 10) == 0) and ((y % 10) == 0)
           points << {:x => x, :y => y, :z => depth}
         end
-        #if x == (width / 2).to_i and y == (height / 2).to_i
-        #  points = [{:x => x, :y => y, :z => depth}]
-        #end
       end
 
       block.call points
@@ -79,6 +69,12 @@ EventMachine::run do
   end
 
   kinect.process
+
+  trap('INT') do
+    STDERR.puts "Caught INT signal cleaning up"
+    @pub.close_connection
+    EventMachine::stop_event_loop
+  end
 end
 
 kinect.close
