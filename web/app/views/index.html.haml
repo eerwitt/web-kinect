@@ -4,6 +4,12 @@
     %title KinectWeb
     %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js", :type => "text/javascript"}
     :javascript
+      function drawPoint(point) {
+        var context = $('#display_2d')[0].getContext("2d");
+        context.fillStyle = "#FF0000";
+        context.fillRect(point.x, point.y, 1, 1);
+      }
+
       var SocketKlass = "MozWebSocket" in window ? MozWebSocket : WebSocket;
       var ws = new SocketKlass('ws://localhost:3000/echo');
 
@@ -17,6 +23,8 @@
           $('#debug').append( $('<li>', {
             text: "x: " + point.x  + ", y: " + point.y + ", z: " + point.z
           }) );
+
+          drawPoint(point);
         });
       };
 
@@ -27,5 +35,7 @@
       ws.onerror = function() {
         alert("error");
       };
+
   %body
+    %canvas#display{:width => 200, :height => 200}
     %ul#debug
