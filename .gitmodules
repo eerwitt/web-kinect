@@ -1,3 +1,6 @@
 [submodule "libfreenect"]
 	path = libfreenect
 	url = https://github.com/OpenKinect/libfreenect.git
+[submodule "web/public/javascripts/three.js"]
+	path = web/public/javascripts/three.js
+	url = https://github.com/mrdoob/three.js.git
