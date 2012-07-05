@@ -6,7 +6,6 @@
     :javascript
       function drawPoint(point) {
         var context = $('#display_2d')[0].getContext("2d");
-        console.log(point.z);
         context.fillStyle = "rgb("+ point.z + ",255,255)";
         context.fillRect(point.x / 640 * 640, point.y / 480 * 480, 8, 8);
       }

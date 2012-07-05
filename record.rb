@@ -32,7 +32,7 @@ class Kinect
         end
         x += 1
 
-        if ((x % 8) == 0) and ((y % 8) == 0)
+        if ((x % 10) == 0) and ((y % 10) == 0)
           # Converting depth to rgb normalized for testing
           points << {:x => x, :y => y, :z => (depth.to_f / 1000.0 * 255.0).round}
         end
@@ -56,26 +56,25 @@ class Kinect
   end
 end
 
-kinect = Kinect.new
+@kinect = Kinect.new
 EventMachine::run do
   @pub = EM::Hiredis.connect("redis://localhost:6379")
 
   frames = 0
-  kinect.start do |points|
+  @kinect.start do |points|
     frames += 1
-    if (frames % 7) == 0
+    if (frames % 5) == 0
       puts "Publishing"
       @pub.publish("kinect_raw", {:points => points}.to_json)
     end
   end
 
-  kinect.process
+  @kinect.process
 
   trap('INT') do
     STDERR.puts "Caught INT signal cleaning up"
     @pub.close_connection
+    @kinect.close
     EventMachine::stop_event_loop
   end
 end
-
-kinect.close
