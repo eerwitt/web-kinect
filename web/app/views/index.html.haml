@@ -6,8 +6,9 @@
     :javascript
       function drawPoint(point) {
         var context = $('#display_2d')[0].getContext("2d");
-        context.fillStyle = "#FF0000";
-        context.fillRect(point.x, point.y, 1, 1);
+        console.log(point.z);
+        context.fillStyle = "rgb("+ point.z + ",255,255)";
+        context.fillRect(point.x / 640 * 640, point.y / 480 * 480, 8, 8);
       }
 
       var SocketKlass = "MozWebSocket" in window ? MozWebSocket : WebSocket;
@@ -20,10 +21,6 @@
       ws.onmessage = function(e) {
         var data = $.parseJSON(e.data);
         $.each(data.points, function(i, point) {
-          $('#debug').append( $('<li>', {
-            text: "x: " + point.x  + ", y: " + point.y + ", z: " + point.z
-          }) );
-
           drawPoint(point);
         });
       };
@@ -37,5 +34,5 @@
       };
 
   %body
-    %canvas#display{:width => 200, :height => 200}
-    %ul#debug
+    %canvas#display_2d{:width => 640, :height => 480}
+      &nbsp;
