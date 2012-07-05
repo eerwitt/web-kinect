@@ -1,4 +1,3 @@
-require 'ruby-debug'
 $: << File.expand_path(File.join(File.dirname(__FILE__), "./libfreenect/wrappers/ruby/ffi-libfreenect/lib"))
 require 'eventmachine'
 require 'em-hiredis'
