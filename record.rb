@@ -33,8 +33,8 @@ class Kinect
         x += 1
 
         if ((x % 10) == 0) and ((y % 10) == 0)
-          # Converting depth to rgb normalized for testing
-          points << {:x => x, :y => y, :z => (depth.to_f / 1000.0 * 255.0).round}
+          # Normalize based on some number I made up
+          points << {:x => x, :y => y, :z => depth.to_f / 1000.0}
         end
       end
 
@@ -63,7 +63,7 @@ EventMachine::run do
   frames = 0
   @kinect.start do |points|
     frames += 1
-    if (frames % 5) == 0
+    if (frames % 2) == 0
       puts "Publishing"
       @pub.publish("kinect_raw", {:points => points}.to_json)
     end
