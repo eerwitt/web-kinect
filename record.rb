@@ -39,10 +39,12 @@ class Kinect
         end
         x += 1
 
-        #points << {:x => x, :y => y, :z => depth}
-        if x == (width / 2).to_i and y == (height / 2).to_i
-          points = [{:x => x, :y => y, :z => depth}]
+        if ((x % 10) == 0) and ((y % 10) == 0)
+          points << {:x => x, :y => y, :z => depth}
         end
+        #if x == (width / 2).to_i and y == (height / 2).to_i
+        #  points = [{:x => x, :y => y, :z => depth}]
+        #end
       end
 
       block.call points
@@ -67,9 +69,13 @@ kinect = Kinect.new
 EventMachine::run do
   @pub = EM::Hiredis.connect("redis://localhost:6379")
 
+  frames = 0
   kinect.start do |points|
-    puts "Publishing"
-    @pub.publish("kinect_raw", {:points => points}.to_json)
+    frames += 1
+    if (frames % 20) == 0
+      puts "Publishing"
+      @pub.publish("kinect_raw", {:points => points}.to_json)
+    end
   end
 
   kinect.process
