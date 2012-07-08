@@ -30,14 +30,13 @@
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
         camera.position.x = - 640 / 2;
         camera.position.y = - 480 / 2;
-        camera.position.z = 200;
+        camera.position.z = -50;
         scene.add( camera );
 
         renderer = new THREE.CanvasRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
 
         var element = renderer.domElement;
-        $(element).mousemove(updateCamera);
         document.body.appendChild( element );
       }
 
@@ -81,12 +80,18 @@
         }
 
         var mesh = meshes[point.x][point.y]
-        mesh.position.z = -(point.z * 100.0);
+        mesh.position.z = -point.z;
       }
 
       function updateDisplay(points) {
-        $.each(points, function(i, point) {
-          createMesh(point);
+        $.each(points, function(x, xpoints) {
+          $.each(xpoints, function(y, depth) {
+            var point_object = {
+              "x": x,
+              "y": y,
+              "z": depth };
+            createMesh(point_object);
+          });
         });
       }
 

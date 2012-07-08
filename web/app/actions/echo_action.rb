@@ -10,10 +10,11 @@ class EchoAction <  Rack::WebSocket::Application
     @sub.subscribe "kinect_raw"
 
     EM.next_tick do
-      # {:points => [{:x => 123, :y => 234, :z => 456}]}
-      @sub.on(:message) do |channel,pixels| 
-        puts "Got pixels #{pixels.length}"
-        send_data LZMA.decompress(pixels)
+      @sub.on(:message) do |channel, raw_pixels| 
+        puts "Got pixels"
+        pixels = LZMA.decompress(raw_pixels)
+
+        send_data pixels
       end
     end
   end

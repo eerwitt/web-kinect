@@ -13,6 +13,8 @@ class Kinect
     @dev = @ctx.open_device(0)
     @dev.set_depth_mode(Freenect::DEPTH_11BIT)
     @dev.set_video_mode(Freenect::VIDEO_RGB)
+
+    @last_points = {}
   end
 
   def start(&block)
@@ -25,7 +27,10 @@ class Kinect
 
       x = 0
       y = 1
-      points = []
+
+      points = {}
+      updated = 0
+
       puts "Reading depths"
       depth.read_string_length(Freenect::DEPTH_11BIT_SIZE).unpack('S*').each_with_index do |depth, i|
         if (i % width) == 0
@@ -35,11 +40,18 @@ class Kinect
         x += 1
 
         if ((x % 10) == 0) and ((y % 10) == 0)
-          # Normalize based on some number I made up
-          points << {:x => x, :y => y, :z => depth.to_f / 1000.0}
+          points[x] = {} if not points.key?(x)
+
+          current_depth = depth.to_f
+          if not @last_points.key?(x) or not @last_points[x].key?(y) or not (current_depth > @last_points[x][y] - 10 and current_depth < @last_points[x][y] + 10)
+            updated += 1
+            points[x][y] = current_depth
+          end
         end
       end
 
+      @last_points = points
+      puts "Points updated #{updated}"
       block.call points
     end
   end
@@ -66,14 +78,13 @@ EventMachine::run do
   @kinect.start do |points|
     frames += 1
     if (frames % 2) == 0
-      puts "Publishing"
       @pub.publish("kinect_raw", LZMA.compress({:points => points}.to_json))
     end
   end
 
   @kinect.process
 
-  trap('INT') do
+  trap('INT', 'TERM') do
     STDERR.puts "Caught INT signal cleaning up"
     @pub.close_connection
     @kinect.close
