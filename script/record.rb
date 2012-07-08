@@ -1,9 +1,11 @@
-require 'ruby-debug'
-$: << File.expand_path(File.join(File.dirname(__FILE__), "./libfreenect/wrappers/ruby/ffi-libfreenect/lib"))
+$: << File.expand_path(File.join(File.dirname(__FILE__), "../libfreenect/wrappers/ruby/ffi-libfreenect/lib"))
 require 'eventmachine'
 require 'em-hiredis'
 require 'freenect'
 require 'json'
+require 'lzma'
+
+STDOUT.sync = true
 
 class Kinect
   def initialize
@@ -65,7 +67,7 @@ EventMachine::run do
     frames += 1
     if (frames % 2) == 0
       puts "Publishing"
-      @pub.publish("kinect_raw", {:points => points}.to_json)
+      @pub.publish("kinect_raw", LZMA.compress({:points => points}.to_json))
     end
   end
 

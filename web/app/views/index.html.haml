@@ -7,6 +7,8 @@
     
     %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js", :type => "text/javascript"}
     %script{:src => "/javascripts/three.js/build/Three.js", :type => "text/javascript"}
+    %script{:src => "/javascripts/LZMA-JS/src/lzma.js", :type => "text/javascript"}
+
     :javascript
       function drawPoint2D(point) {
         var context = $('#display_2d')[0].getContext("2d");
@@ -30,7 +32,6 @@
         camera.position.y = - 480 / 2;
         camera.position.z = 200;
         scene.add( camera );
-
 
         renderer = new THREE.CanvasRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -83,6 +84,12 @@
         mesh.position.z = -(point.z * 100.0);
       }
 
+      function updateData(points) {
+        $.each(points, function(i, point) {
+          createMesh(point);
+        });
+      }
+
       var SocketKlass = "MozWebSocket" in window ? MozWebSocket : WebSocket;
       var ws = new SocketKlass('ws://localhost:3000/echo');
 
@@ -90,11 +97,10 @@
         console.log("conneted");
       };
 
+      var lzma = new LZMA("/javascripts/LZMA-JS/src/lzma_worker.js");
       ws.onmessage = function(e) {
-        var data = $.parseJSON(e.data);
-        $.each(data.points, function(i, point) {
-          createMesh(point);
-        });
+        debugger
+        lzma.decompress(e.data, updateData, function(percent) {console.log(percent)});
       };
 
       ws.onclose = function() {

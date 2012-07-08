@@ -4,3 +4,6 @@
 [submodule "web/public/javascripts/three.js"]
 	path = web/public/javascripts/three.js
 	url = https://github.com/mrdoob/three.js.git
+[submodule "web/public/javascripts/LZMA-JS"]
+	path = web/public/javascripts/LZMA-JS
+	url = https://github.com/nmrugg/LZMA-JS.git
