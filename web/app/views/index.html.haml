@@ -84,7 +84,7 @@
         mesh.position.z = -(point.z * 100.0);
       }
 
-      function updateData(points) {
+      function updateDisplay(points) {
         $.each(points, function(i, point) {
           createMesh(point);
         });
@@ -99,8 +99,11 @@
 
       var lzma = new LZMA("/javascripts/LZMA-JS/src/lzma_worker.js");
       ws.onmessage = function(e) {
-        debugger
-        lzma.decompress(e.data, updateData, function(percent) {console.log(percent)});
+        var data = $.parseJSON(e.data);
+        updateDisplay(data.points);
+
+        // Temporarily commenting out until I discover a way around issues with current websockets implementation
+        //lzma.decompress(e.data, updateData, function(percent) {console.log(percent)});
       };
 
       ws.onclose = function() {
